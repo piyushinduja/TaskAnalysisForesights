@@ -28,8 +28,8 @@ dependency_df = pd.DataFrame(dependency_count.items(), columns=['In Progress Tas
 dependency_df = dependency_df.sort_values(by='# Not Started Dependents', ascending=False)
 
 st.header("1. Dependency on In Progress Tasks")
-st.dataframe(dependency_df)
 st.bar_chart(dependency_df.set_index('In Progress Task ID'), color="#0CEABD")
+st.dataframe(dependency_df)
 
 # Graph 2
 
@@ -103,15 +103,14 @@ ax.set_xlabel("Root Task")
 plt.xticks(rotation=90)
 plt.tight_layout()
 st.pyplot(fig)
-st.subheader("Raw Counts")
 st.dataframe(cascade_series.reset_index().rename(columns={'index': 'Task ID', 0: 'Affected Task Count'}))
 
 # Key Performance Metrics
 
 st.header("4. Key Performance Metrics")
 
-in_progress_df['Est. Remaining'] = in_progress_df['Estimated Duration'] - in_progress_df['Actual Duration']
-in_progress_df['On Track'] = in_progress_df['Est. Remaining'] <= in_progress_df['Remaining Duration']
+in_progress_df['Estimated Remaining'] = in_progress_df['Estimated Duration'] - in_progress_df['Actual Duration']
+in_progress_df['On Track'] = in_progress_df['Estimated Remaining'] <= in_progress_df['Remaining Duration']
 on_track_summary = in_progress_df['On Track'].value_counts()
 on_track_percent = on_track_summary.get(True, 0) / on_track_summary.sum() * 100
 st.metric(
